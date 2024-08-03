@@ -1,0 +1,15 @@
+Static 0 0 0 0 0 0 0 0 0
+Static 0 0 0 0 0 0 0 0 0
+Car 0 0 0 0 0 0 0 0 0
+Car 0 0 0 0 0 0 0 0 0
+Car 0 0 0 0 0 0 0 0 0
+Car 0 0 0 0 0 0 0 0 0
+Buildings 0 0 0 0 0 0 0 0 0
+Buildings 0 0 0 0 0 0 0 0 0
+Buildings 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0

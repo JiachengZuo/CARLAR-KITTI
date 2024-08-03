@@ -1,0 +1,6 @@
+Walls 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+TrafficSigns 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Static 0 0 0 0 0 0 0 0 0

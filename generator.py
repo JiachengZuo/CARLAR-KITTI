@@ -2,12 +2,15 @@ from DataSave import DataSave
 from SynchronyModel import SynchronyModel
 from config import cfg_from_yaml_file
 from data_utils import objects_filter
-
+import carla
 def main():
+    # config配置，各种传感器和carla配置
     cfg = cfg_from_yaml_file("configs.yaml")
     model = SynchronyModel(cfg)
+    # 设置数据集路径，保存路径，存储路径
     dtsave = DataSave(cfg)
     try:
+        # carla产生actor以及传感器舰艇
         model.set_synchrony()
         model.spawn_actors()
         model.set_actors_route()
@@ -23,6 +26,7 @@ def main():
                 print(step / STEP)
             else:
                 model.world.tick()
+            
             step+=1
     finally:
         model.setting_recover()

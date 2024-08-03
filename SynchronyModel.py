@@ -7,8 +7,16 @@ import numpy as np
 
 from config import config_to_trans
 from data_utils import camera_intrinsic, filter_by_distance
+import os
+import glob
 
-sys.path.append("/opt/carla-simulator/PythonAPI/carla/dist/carla-0.9.12-py3.7-linux-x86_64.egg")
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
 
 import carla
 
@@ -147,7 +155,6 @@ class SynchronyModel:
         agent = self.world.spawn_actor(vehicle_bp, transform)
         agent.set_autopilot(True, self.traffic_manager.get_port())
         self.actors["agents"].append(agent)
-
         self.actors["sensors"][agent] = []
         for sensor, config in self.cfg["SENSOR_CONFIG"].items():
             sensor_bp = self.world.get_blueprint_library().find(config["BLUEPRINT"])
@@ -176,8 +183,11 @@ class SynchronyModel:
         ret = {"environment_objects": None, "actors": None, "agents_data": {}}
         self.frame = self.world.tick()
 
+        # 获取所有物体标签
         ret["environment_objects"] = self.world.get_environment_objects(carla.CityObjectLabel.Any)
+        # 获取所有的actors
         ret["actors"] = self.world.get_actors()
+        # 图像的分辨率
         image_width = self.cfg["SENSOR_CONFIG"]["RGB"]["ATTRIBUTE"]["image_size_x"]
         image_height = self.cfg["SENSOR_CONFIG"]["RGB"]["ATTRIBUTE"]["image_size_y"]
         for agent, dataQue in self.data["sensor_data"].items():
@@ -186,7 +196,7 @@ class SynchronyModel:
             ret["agents_data"][agent] = {}
             ret["agents_data"][agent]["sensor_data"] = data
             ret["agents_data"][agent]["intrinsic"] = camera_intrinsic(image_width, image_height)
-            ret["agents_data"][agent]["extrinsic"] = np.mat(
+            ret["agents_data"][agent]["extrinsic"] = np.asmatrix(
                 self.actors["sensors"][agent][0].get_transform().get_matrix())
         filter_by_distance(ret, self.cfg["FILTER_CONFIG"]["PRELIMINARY_FILTER_DISTANCE"])
         return ret

@@ -1,0 +1,16 @@
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Walls 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0
+Poles 0 0 0 0 0 0 0 0 0

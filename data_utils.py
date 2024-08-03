@@ -8,8 +8,15 @@ from data_descriptor import KittiDescriptor, CarlaDescriptor
 from image_converter import depth_to_array, to_rgb_array
 import math
 from visual_utils import draw_3d_bounding_box
+import os, glob
 
-sys.path.append("/opt/carla-simulator/PythonAPI/carla/dist/carla-0.9.12-py3.7-linux-x86_64.egg")
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
 
 import carla
 
@@ -23,9 +30,12 @@ WINDOW_HEIGHT = cfg["SENSOR_CONFIG"]["DEPTH_RGB"]["ATTRIBUTE"]["image_size_y"]
 
 
 def objects_filter(data):
+    # 获取所有actors的label和bbox
     environment_objects = data["environment_objects"]
+    # 所有的传感器数据
     agents_data = data["agents_data"]
     actors = data["actors"]
+    # 获取所有的actors
     actors = [x for x in actors if x.type_id.find("vehicle") != -1 or x.type_id.find("walker") != -1]
     for agent, dataDict in agents_data.items():
         intrinsic = dataDict["intrinsic"]
@@ -38,6 +48,7 @@ def objects_filter(data):
         depth_data = sensors_data[1]
 
         data["agents_data"][agent]["visible_environment_objects"] = []
+        # 便利所有的环境label
         for obj in environment_objects:
             kitti_datapoint, carla_datapoint = is_visible_by_bbox(agent, obj, image, depth_data, intrinsic, extrinsic)
             if kitti_datapoint is not None:
@@ -61,13 +72,18 @@ def objects_filter(data):
 
 
 def is_visible_by_bbox(agent, obj, rgb_image, depth_data, intrinsic, extrinsic):
+    # 获取物体位置
     obj_transform = obj.transform if isinstance(obj, carla.EnvironmentObject) else obj.get_transform()
+    # 获取物体3维bbox
     obj_bbox = obj.bounding_box
     if isinstance(obj, carla.EnvironmentObject):
+        # 获取3d bbox在2维图像上的坐标
         vertices_pos2d = bbox_2d_from_agent(intrinsic, extrinsic, obj_bbox, obj_transform, 0)
     else:
         vertices_pos2d = bbox_2d_from_agent(intrinsic, extrinsic, obj_bbox, obj_transform, 1)
+    # 获取深度图片
     depth_image = depth_to_array(depth_data)
+    # 筛选3d bbox中的8个点，哪几个在相机视野中
     num_visible_vertices, num_vertices_outside_camera = calculate_occlusion_stats(vertices_pos2d, depth_image)
     if num_visible_vertices >= MIN_VISIBLE_VERTICES_FOR_RENDER and num_vertices_outside_camera < MAX_OUT_VERTICES_FOR_RENDER:
         obj_tp = obj_type(obj)
@@ -89,8 +105,9 @@ def is_visible_by_bbox(agent, obj, rgb_image, depth_data, intrinsic, extrinsic):
             "{} {} {}".format(obj.get_acceleration().x, obj.get_acceleration().y, obj.get_acceleration().z)
         angular_velocity = "0 0 0" if isinstance(obj, carla.EnvironmentObject) else\
             "{} {} {}".format(obj.get_angular_velocity().x, obj.get_angular_velocity().y, obj.get_angular_velocity().z)
-        # draw_3d_bounding_box(rgb_image, vertices_pos2d)
-
+        draw_3d_bounding_box(rgb_image, vertices_pos2d)
+        import cv2
+        cv2.imwrite('./data/bbox/{0:03}.png',rgb_image)
         kitti_data = KittiDescriptor()
         kitti_data.set_truncated(truncated)
         kitti_data.set_occlusion(occluded)
@@ -112,9 +129,9 @@ def obj_type(obj):
     if isinstance(obj, carla.EnvironmentObject):
         return obj.type
     else:
-        if obj.type_id.find('walker') is not -1:
+        if obj.type_id.find('walker') != -1:
             return 'Pedestrian'
-        if obj.type_id.find('vehicle') is not -1:
+        if obj.type_id.find('vehicle') != -1:
             return 'Car'
         return None
 
@@ -127,6 +144,7 @@ def get_relative_rotation_y(agent_rotation, obj_rotation):
 
 
 def bbox_2d_from_agent(intrinsic_mat, extrinsic_mat, obj_bbox, obj_transform, obj_tp):
+    # 获取自身8个坐标点的bbox
     bbox = vertices_from_extension(obj_bbox.extent)
     if obj_tp == 1:
         bbox_transform = carla.Transform(obj_bbox.location, obj_bbox.rotation)
@@ -137,6 +155,7 @@ def bbox_2d_from_agent(intrinsic_mat, extrinsic_mat, obj_bbox, obj_transform, ob
                                       obj_bbox.location.z-obj_transform.location.z)
         box_rotation = obj_bbox.rotation
         bbox_transform = carla.Transform(box_location, box_rotation)
+        # 坐标转换
         bbox = transform_points(bbox_transform, bbox)
     # 获取bbox在世界坐标系下的点的坐标
     bbox = transform_points(obj_transform, bbox)
@@ -166,7 +185,7 @@ def transform_points(transform, points):
     # [[X0..,Xn],[Y0..,Yn],[Z0..,Zn],[1,..1]]  (4,8)
     points = np.append(points, np.ones((1, points.shape[1])), axis=0)
     # transform.get_matrix() 获取当前坐标系向相对坐标系的旋转矩阵
-    points = np.mat(transform.get_matrix()) * points
+    points = np.asmatrix(transform.get_matrix()) * points
     # 返回前三行
     return points[0:3].transpose()
 
