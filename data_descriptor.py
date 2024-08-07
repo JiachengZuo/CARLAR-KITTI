@@ -110,7 +110,7 @@ class KittiDescriptor:
         assert - \
             pi <= rotation_y <= pi, "Rotation y must be in range [-pi..pi] - found {}".format(
                 rotation_y)
-        self.rotation_y = rotation_y
+        self.rotation_y = -rotation_y
 
 
     def __str__(self):

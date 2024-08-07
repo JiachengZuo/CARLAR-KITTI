@@ -1,4 +1,0 @@
-Sidewalks 0 0 0 0 0 0 0 0 0
-Poles 0 0 0 0 0 0 0 0 0
-Poles 0 0 0 0 0 0 0 0 0
-Poles 0 0 0 0 0 0 0 0 0
