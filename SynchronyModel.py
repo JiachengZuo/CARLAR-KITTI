@@ -20,6 +20,111 @@ except IndexError:
 
 import carla
 
+def create_circle_npc(blueprint_library, sim_world):
+        vehicle_list = []
+        x = -384.7 
+        y = -17.7
+        angle = 250
+        car_type = 'vehicle.chevrolet.impala'
+        # 第一批车
+        for i in range(8):
+            location = carla.Location(x, y, 0.5)          
+            rotation = carla.Rotation(0, angle ,0)
+            x -= 1
+            y -= 10
+            angle += 5
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            # spawn the vehicle
+            vehicle = sim_world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+        
+        x = -390.1 
+        y = -128.8
+        angle = 260
+        #第二批车
+        for i in range(8):
+            location = carla.Location(x, y, 0.5)          
+            rotation = carla.Rotation(0, angle ,0)
+            x += 3
+            y -= 10
+            angle += 5
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            # spawn the vehicle
+            vehicle = sim_world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+
+        x = -351.6 
+        y = -216.8
+        angle = 200
+        #第三批车
+        for i in range(8):
+            location = carla.Location(x, y, 0.5)          
+            rotation = carla.Rotation(0, angle ,0)
+            x += 2
+            y -= 3
+            angle += 5
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            # spawn the vehicle
+            vehicle = sim_world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+
+        x = -328.0 
+        y = -250.1
+        angle = 60
+        #第四批车
+        for i in range(8):
+            location = carla.Location(x, y, 0.5)          
+            rotation = carla.Rotation(0, angle ,0)
+            x += 3
+            y -= 3
+            # angle += 5
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            # spawn the vehicle
+            vehicle = sim_world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+
+
+        x = -281.0
+        y = -291.0
+        angle = 140
+        # 第五批车
+        for i in range(8):
+            location = carla.Location(x, y, 0.5)          
+            rotation = carla.Rotation(0, angle ,0)
+            x += 6
+            y -= 3
+            # angle += 5
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            # spawn the vehicle
+            vehicle = sim_world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+
+        return vehicle_list
 
 class SynchronyModel:
     def __init__(self, cfg):
@@ -34,12 +139,198 @@ class SynchronyModel:
         self.data = {"sensor_data": {}, "environment_data": None}  # 记录每一帧的数据
         self.vehicle = None
 
+    
+
+    def vehicle_npc_create(self):
+        vehicle_list = []
+        blueprint_library = self.world.get_blueprint_library()
+
+        # vehicle_list = create_circle_npc(blueprint_library, self.world)
+
+
+        for i in range(18):
+            if i < 6:
+                car_type = 'vehicle.audi.etron'
+                location = carla.Location(112.8 - i * 5, -85.1, 0.5)
+                rotation = carla.Rotation(0, 270 ,0)
+                spawn_point = carla.libcarla.Transform(location,rotation)
+                vehicle_bp = blueprint_library.find(car_type)
+                if i == 3:
+                    vehicle_bp.set_attribute('color', '0, 0, 0')  
+                else:
+                    vehicle_bp.set_attribute('color', '255, 255, 255')  
+                # spawn the vehicle
+                vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+                vehicle_list.append(vehicle)
+            elif i == 6 or i == 7 or i == 8:
+                car_type = 'vehicle.audi.tt'
+                location = carla.Location(112.8 - i * 5, -85.1, 0.5)
+                rotation = carla.Rotation(0, 270 ,0)
+                spawn_point = carla.libcarla.Transform(location,rotation)
+                vehicle_bp = blueprint_library.find(car_type)
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+                # spawn the vehicle
+                vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+                vehicle_list.append(vehicle)
+            else:
+                car_type = 'vehicle.audi.etron'
+                location = carla.Location(112.8 - i * 7, -85.1, 0.5)
+                rotation = carla.Rotation(0, 270 ,0)
+                spawn_point = carla.libcarla.Transform(location,rotation)
+                vehicle_bp = blueprint_library.find(car_type)
+                if i == 3:
+                    vehicle_bp.set_attribute('color', '0, 0, 0')  
+                else:
+                    vehicle_bp.set_attribute('color', '255, 255, 255')  
+                # spawn the vehicle
+                vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+                vehicle_list.append(vehicle)
+        # left
+        for i in range(18):
+            car_type = 'vehicle.audi.tt'
+            location = carla.Location(112.8- i * 7, -98.2, 0.5)
+            rotation = carla.Rotation(0, 90 ,0)
+            spawn_point = carla.libcarla.Transform(location,rotation)
+            vehicle_bp = blueprint_library.find(car_type)
+            if i % 2 == 0:
+                vehicle_bp.set_attribute('color', '0, 0, 0')  
+            elif i % 2 == 1:
+                vehicle_bp.set_attribute('color', '255, 255, 255')  
+            if i == 1:
+                vehicle_bp.set_attribute('color', '255, 0, 0')  
+            if i == 5:
+                vehicle_bp.set_attribute('color', '136, 113, 66')  
+            if i == 6:
+                rotation = carla.Rotation(0, 270 ,0)
+                spawn_point = carla.libcarla.Transform(location,rotation)
+            # spawn the vehicle
+            vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+            vehicle_list.append(vehicle)
+
+        # car_type = 'vehicle.audi.etron'
+        # for i in range(18):
+        #     location = carla.Location(95.4 - i * 5, -85.1, 0.5)
+        #     rotation = carla.Rotation(0, 270 ,0)
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find(car_type)
+        #     if i % 2 == 0:
+        #         vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #     elif i % 2 == 1:
+        #         vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #     # spawn the vehicle
+        #     vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #     vehicle_list.append(vehicle)
+
+        # for i in range(18):
+        #     location = carla.Location(94.7 - i * 5, -98.2, 0.5)
+        #     rotation = carla.Rotation(0, 90 ,0)
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find(car_type)
+        #     if i % 2 == 0:
+        #         vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #     elif i % 2 == 1:
+        #         vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #     # spawn the vehicle
+        #     vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #     vehicle_list.append(vehicle)
+        # #circle
+        # x = -384.7 
+        # y = -17.7
+        # angle = 250
+        # # 第一批车
+        # for i in range(8):
+        #     location = carla.Location(x, y, 0.5)          
+        #     rotation = carla.Rotation(0, angle ,0)
+        #     x -= 1
+        #     y -= 10
+        #     angle += 5
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find('vehicle.audi.tt')
+        #     if i == 0:
+        #         vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #     elif i == 2:
+        #         vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #     else:
+        #         vehicle_bp.set_attribute('color', '255, 0, 0')  
+        #     # spawn the vehicle
+        #     vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #     vehicle_list.append(vehicle)
+        
+        # x = -390.1 
+        # y = -128.8
+        # angle = 260
+        # #第二批车
+        # for i in range(8):
+        #     location = carla.Location(x, y, 0.5)          
+        #     rotation = carla.Rotation(0, angle ,0)
+        #     x += 3
+        #     y -= 10
+        #     angle += 5
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find('vehicle.audi.tt')
+        #     if i == 0:
+        #         vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #     elif i == 2:
+        #         vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #     else:
+        #         vehicle_bp.set_attribute('color', '255, 0, 0')  
+        #     # spawn the vehicle
+        #     vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #     vehicle_list.append(vehicle)
+
+        #foxcon
+        # 左侧
+        # for i in range(1):
+        #     location = carla.Location(-384.7, -17.7 - i * 6, 0.5)
+        #     rotation = carla.Rotation(0, 250 ,0)
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find('vehicle.audi.tt')
+        #     if i % 2 == 0:
+        #             if i == 0:
+        #                 vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #             elif i == 2:
+        #                 vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #             else:
+        #                 vehicle_bp.set_attribute('color', '255, 0, 0')  
+        #             # spawn the vehicle
+        #             vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #             vehicle_list.append(vehicle)
+        
+        # 右侧
+        # for i in range(7):
+        #     location = carla.Location(5.3, -42.0 - i * 6, 0.5)
+        #     rotation = carla.Rotation(0, 270 ,0)
+        #     spawn_point = carla.libcarla.Transform(location,rotation)
+        #     vehicle_bp = blueprint_library.find('vehicle.audi.tt')
+        #     if i % 2 == 0:
+        #         if i == 0:
+        #             vehicle_bp.set_attribute('color', '0, 0, 0')  
+        #         elif i == 2:
+        #             vehicle_bp.set_attribute('color', '255, 255, 255')  
+        #         else:
+        #             vehicle_bp.set_attribute('color', '255, 0, 0')  
+        #         # spawn the vehicle
+        #         vehicle = self.world.spawn_actor(vehicle_bp, spawn_point)
+        #         vehicle_list.append(vehicle)
+        # return vehicle_list
+
     def set_synchrony(self):
         self.init_settings = self.world.get_settings()
         settings = self.world.get_settings()
         settings.synchronous_mode = True
         settings.fixed_delta_seconds = 0.05
         self.world.apply_settings(settings)
+        # Set weather for your world
+        # rain
+        # weather = carla.WeatherParameters(cloudiness = 80,
+        #                                   precipitation=100.0,
+        #                                   precipitation_deposits = 80,
+        #                                   sun_altitude_angle=10)
+
+        # fog
+        # weather = carla.WeatherParameters(fog_density = 50,fog_distance = 5,
+        #                                   sun_altitude_angle=10)
+        # self.world.set_weather(weather)
 
     def setting_recover(self):
         for agent in self.actors["agents"]:
@@ -59,7 +350,7 @@ class SynchronyModel:
         num_of_walkers = self.cfg["CARLA_CONFIG"]["NUM_OF_WALKERS"]
 
         # 生成车辆actors
-        blueprints = self.world.get_blueprint_library().filter("vehicle.*")
+        blueprints = self.world.get_blueprint_library().filter("vehicle.audi.*")
         blueprints = sorted(blueprints, key=lambda bp: bp.id)
         spawn_points = self.world.get_map().get_spawn_points()
         number_of_spawn_points = len(spawn_points)
@@ -151,8 +442,9 @@ class SynchronyModel:
         vehicle_bp = random.choice(self.world.get_blueprint_library().filter(self.cfg["AGENT_CONFIG"]["BLUEPRINT"]))
         trans_cfg = self.cfg["AGENT_CONFIG"]["TRANSFORM"]
         transform = config_to_trans(trans_cfg)
-        transform = random.choice(self.world.get_map().get_spawn_points())
+        # transform = random.choice(self.world.get_map().get_spawn_points())
         agent = self.world.spawn_actor(vehicle_bp, transform)
+        print(transform)
         agent.set_autopilot(True, self.traffic_manager.get_port())
         self.actors["agents"].append(agent)
         self.actors["sensors"][agent] = []

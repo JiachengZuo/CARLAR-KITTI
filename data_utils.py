@@ -48,7 +48,7 @@ def objects_filter(data):
         depth_data = sensors_data[1]
 
         data["agents_data"][agent]["visible_environment_objects"] = []
-        # 便利所有的环境label
+        # 所有的环境label
         for obj in environment_objects:
             kitti_datapoint, carla_datapoint = is_visible_by_bbox(agent, obj, image, depth_data, intrinsic, extrinsic)
             if kitti_datapoint is not None:

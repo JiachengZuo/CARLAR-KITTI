@@ -3,6 +3,8 @@ from SynchronyModel import SynchronyModel
 from config import cfg_from_yaml_file
 from data_utils import objects_filter
 import carla
+    
+
 def main():
     # config配置，各种传感器和carla配置
     cfg = cfg_from_yaml_file("configs.yaml")
@@ -12,6 +14,7 @@ def main():
     try:
         # carla产生actor以及传感器舰艇
         model.set_synchrony()
+        model.vehicle_npc_create()
         model.spawn_actors()
         model.set_actors_route()
         model.spawn_agent()
@@ -29,6 +32,8 @@ def main():
             
             step+=1
     finally:
+        # if vehicle_list is not None:
+        #     model.client.apply_batch([carla.command.DestroyActor(x) for x in vehicle_list])
         model.setting_recover()
 
 

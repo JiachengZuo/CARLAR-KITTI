@@ -6,12 +6,6 @@
 
 ![image](https://user-images.githubusercontent.com/55339200/138204888-18958f52-ab1a-454a-8eef-23b7d4987f37.png)
 
-**数据收集流程**
-
-![image](https://user-images.githubusercontent.com/55339200/138204862-d4863c85-418b-4e4a-8db8-9efc7029635c.png)
-
-
-
 **数据集格式**
 
 training
@@ -57,7 +51,7 @@ label标定的目标主要分为两类，第一类是我们自己生成的actors
 
 **使用**
 
-Carla版本：carla 0.9.12
+Carla版本：carla 0.9.15
 
 ```
 python generator.py
@@ -76,4 +70,5 @@ export_utils，保存数据的工具函数
 image_converter.py, 图片格式转换函数
 
 visual_utils，可视化工具函数
+
 
